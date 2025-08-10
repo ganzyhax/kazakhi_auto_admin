@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <script src="https://widget.tiptoppay.kz/bundles/widget.js"></script>
+</head>
+<body>
+    <input class="btn" id="payButton" value="Оплатить" type="button">
+
+    <script>
+        // Function to retrieve a query parameter from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get the amount from the URL or set a default value
+        let amount = parseFloat(getQueryParam('amount')) || 0;
+
+        // Ensure amount is valid and greater than zero
+        if (amount <= 0) {
+            alert("Invalid amount specified. Please provide a valid amount in the URL, e.g., ?amount=100");
+        }
+
+        // Set the language
+        let language = "kk"; // Use a fixed language or adapt based on navigator.language
+
+        function pay() {
+            // Initialize the TipTopPay widget
+            var widget = new tiptop.Widget({
+                language: language
+            });
+
+            // Trigger the payment process
+            widget.pay('charge', // or 'charge'
+                { 
+                    publicId: 'pk_622495dbdf79655cf454bc6fe9fa5', // ID from personal account
+                    description: 'Оплата 3$ ≈ ' + amount.toFixed(2) + ' KZT', // Payment description
+                    amount: amount, // Amount fetched from the URL
+                    currency: 'KZT', // Currency
+                    invoiceId: '2412521', // Optional order number
+                    skin: "classic", // Widget design (optional)
+                    autoClose: 3 // Auto-close after 3 seconds
+                }, 
+                {
+                    onSuccess: function(options) { 
+                        console.log("Payment successful");
+                        // Action on successful payment
+                    },
+                    onFail: function(reason, options) { 
+                        console.error("Payment failed:", reason);
+                        // Action on failed payment
+                    },
+                    onComplete: function(paymentResult, options) { 
+                        console.log("Payment complete:", paymentResult);
+                        // Analytics or additional actions
+                    }
+                }
+            );
+        }
+
+        // Automatically call pay function when the page loads
+        window.onload = pay;
+    </script>
+</body>
+</html>

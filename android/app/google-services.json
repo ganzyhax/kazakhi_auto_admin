@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "106449745159",
+    "project_id": "kag-app-f3f7e",
+    "storage_bucket": "kag-app-f3f7e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106449745159:android:39e811046e0484518681a2",
+        "android_client_info": {
+          "package_name": "com.kag.kazakhi_auto_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2Al14-U2w2gloxG1NhQMf68UGr2lYLL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
