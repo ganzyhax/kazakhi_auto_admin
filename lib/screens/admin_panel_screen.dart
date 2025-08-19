@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kazakhi_auto_admin/screens/car_parts/car_parts_requests_screen.dart';
 import 'package:kazakhi_auto_admin/screens/dashboard/dashboard_screen.dart';
+import 'package:kazakhi_auto_admin/screens/information/information_edit_screen.dart';
+import 'package:kazakhi_auto_admin/screens/information/information_screen.dart';
 import 'package:kazakhi_auto_admin/screens/orders/orders_screen.dart';
 import 'package:kazakhi_auto_admin/screens/shipments/shipments_screen.dart';
 import 'package:kazakhi_auto_admin/screens/users/users_screen.dart';
@@ -26,6 +29,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         return const OrdersScreen();
       case 'shipments':
         return const ShipmentsScreen();
+      case 'information':
+        return ContentListPage(); // Assuming DropContentPage is defined elsewhere
+      case 'car_parts_requests':
+        return const CarPartsRequestPage();
       default:
         return const DashboardScreen();
     }

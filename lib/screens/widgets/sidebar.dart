@@ -65,6 +65,18 @@ class Sidebar extends StatelessWidget {
               'shipments',
               Icons.local_shipping_rounded,
             ),
+            _buildNavItem(
+              context,
+              'Информации',
+              'information',
+              Icons.info_outline,
+            ),
+            _buildNavItem(
+              context,
+              'Запросы для запчастей',
+              'car_parts_requests',
+              Icons.car_repair_outlined,
+            ),
             const Spacer(), // Pushes copyright to the bottom
             // Copyright
             Padding(
@@ -110,12 +122,17 @@ class Sidebar extends StatelessWidget {
                   size: 24,
                 ),
                 const SizedBox(width: 16),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.grey[300],
-                    fontSize: 18,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.grey[300],
+                      fontSize: 18,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                    ),
                   ),
                 ),
               ],

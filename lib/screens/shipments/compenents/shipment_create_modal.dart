@@ -49,6 +49,10 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
   List<PickedFileItem> _pickedInvoiceFiles = [];
   List<PickedFileItem> _pickedLocationScreenshots = [];
 
+  // NEW: State for Carfax report
+  List<PickedFileItem> _pickedCarfaxFiles = [];
+  List<String> _uploadedCarfaxFileUrls = [];
+
   List<String> _uploadedCarImageUrls = [];
   List<String> _uploadedPortImageUrls = [];
   List<String> _uploadedInvoiceFileUrls = [];
@@ -116,10 +120,10 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       "status": "purchased",
       "currentLocation": {"lat": null, "lng": null, "updatedAt": null},
       "invoice": {
-        "number": "",
-        "date": null,
         "fileUrl": "", // Expecting single string for fileUrl
       },
+      // NEW: Default for pdfVinReport
+      "pdfVinReport": {"fileUrl": ""},
       "paid": null,
       "balance": null,
       "internationalPort": "",
@@ -176,6 +180,15 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
     // If it was somehow an array from initial data, take the first one if not empty
     else if (invoiceFileUrl is List && invoiceFileUrl.isNotEmpty) {
       _uploadedInvoiceFileUrls.add(invoiceFileUrl.first.toString());
+    }
+
+    // NEW: Initialize Carfax file URL
+    final dynamic carfaxFileUrl = data["pdfVinReport"]?["fileUrl"];
+    _uploadedCarfaxFileUrls = [];
+    if (carfaxFileUrl is String && carfaxFileUrl.isNotEmpty) {
+      _uploadedCarfaxFileUrls.add(carfaxFileUrl);
+    } else if (carfaxFileUrl is List && carfaxFileUrl.isNotEmpty) {
+      _uploadedCarfaxFileUrls.add(carfaxFileUrl.first.toString());
     }
 
     _paidController.text = data["paid"]?.toString() ?? '';
@@ -387,6 +400,19 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         }
       }
 
+      // NEW: Upload Carfax file
+      String? carfaxFileUrl;
+      if (_pickedCarfaxFiles.isNotEmpty) {
+        carfaxFileUrl = await _uploadFile(_pickedCarfaxFiles.first.file);
+        if (carfaxFileUrl == null) {
+          _showMessage(
+            'Не удалось загрузить файл Carfax: ${_pickedCarfaxFiles.first.file.name}',
+            isError: true,
+          );
+          return null;
+        }
+      }
+
       // Upload location screenshots
       List<Map<String, dynamic>> locationScreenshots = [];
       if (_locationNameController.text.isNotEmpty &&
@@ -413,6 +439,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         'carImages': carImageUrls,
         'portImages': portImageUrls,
         'invoiceFileUrl': invoiceFileUrl,
+        'carfaxFileUrl': carfaxFileUrl, // NEW: Include Carfax URL
         'locationScreenshots': locationScreenshots,
       };
     } catch (e) {
@@ -467,6 +494,19 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         }
       }
 
+      // NEW: Upload new Carfax file (replace existing one if provided)
+      String? newCarfaxFileUrl;
+      if (_pickedCarfaxFiles.isNotEmpty) {
+        newCarfaxFileUrl = await _uploadFile(_pickedCarfaxFiles.first.file);
+        if (newCarfaxFileUrl == null) {
+          _showMessage(
+            'Не удалось загрузить новый файл Carfax: ${_pickedCarfaxFiles.first.file.name}',
+            isError: true,
+          );
+          return null;
+        }
+      }
+
       // Upload new location screenshots (add to existing ones)
       List<Map<String, dynamic>> newLocationScreenshots = [];
       if (_locationNameController.text.isNotEmpty &&
@@ -493,6 +533,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         'newCarImages': newCarImageUrls,
         'newPortImages': newPortImageUrls,
         'newInvoiceFileUrl': newInvoiceFileUrl,
+        'newCarfaxFileUrl': newCarfaxFileUrl, // NEW: Include new Carfax URL
         'newLocationScreenshots': newLocationScreenshots,
       };
     } catch (e) {
@@ -517,6 +558,8 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       },
       "status": _selectedStatus,
       "invoice": {"fileUrl": uploadedData['invoiceFileUrl']},
+      // NEW: Build the pdfVinReport object
+      "pdfVinReport": {"fileUrl": uploadedData['carfaxFileUrl']},
       "paid": paidAmount,
       "balance": balanceAmount,
       "internationalPort": _internationalPortController.text,
@@ -553,6 +596,13 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
             ? _uploadedInvoiceFileUrls.first
             : null);
 
+    // NEW: Use new Carfax file URL if provided, otherwise keep existing
+    String? finalCarfaxFileUrl =
+        uploadedData['newCarfaxFileUrl'] ??
+        (_uploadedCarfaxFileUrls.isNotEmpty
+            ? _uploadedCarfaxFileUrls.first
+            : null);
+
     // Combine existing and new location screenshots
     List<Map<String, dynamic>> allLocationScreenshots =
         List<Map<String, dynamic>>.from(_uploadedLocationScreenShots);
@@ -571,6 +621,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       },
       "status": _selectedStatus,
       "invoice": {"fileUrl": finalInvoiceFileUrl},
+      "pdfVinReport": {"fileUrl": finalCarfaxFileUrl}, // NEW: Add Carfax object
       "paid": paidAmount,
       "balance": balanceAmount,
       "internationalPort": _internationalPortController.text,
@@ -592,6 +643,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       _pickedPortFiles.clear();
       _pickedInvoiceFiles.clear();
       _pickedLocationScreenshots.clear();
+      _pickedCarfaxFiles.clear(); // NEW: Clear Carfax files
     });
   }
 
@@ -609,6 +661,10 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         if (uploadedData['newInvoiceFileUrl'] != null) {
           _uploadedInvoiceFileUrls = [uploadedData['newInvoiceFileUrl']];
         }
+        // NEW: Update Carfax URL
+        if (uploadedData['newCarfaxFileUrl'] != null) {
+          _uploadedCarfaxFileUrls = [uploadedData['newCarfaxFileUrl']];
+        }
 
         _uploadedLocationScreenShots.addAll(
           uploadedData['newLocationScreenshots'] ?? [],
@@ -622,6 +678,13 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
           _uploadedInvoiceFileUrls = [uploadedData['invoiceFileUrl']];
         } else {
           _uploadedInvoiceFileUrls = [];
+        }
+
+        // NEW: Update Carfax URL
+        if (uploadedData['carfaxFileUrl'] != null) {
+          _uploadedCarfaxFileUrls = [uploadedData['carfaxFileUrl']];
+        } else {
+          _uploadedCarfaxFileUrls = [];
         }
 
         _uploadedLocationScreenShots =
@@ -645,7 +708,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       final request = http.MultipartRequest(
         'POST',
         Uri.parse(
-          'http://localhost:3000/api/admin/uploadFile',
+          'https://back.kazakhiauto.kz/api/admin/uploadFile',
         ), // Replace with your backend URL
       );
 
@@ -696,66 +759,6 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       }
     }
     return null;
-  }
-
-  // Optional: Method to handle partial uploads (if some files fail)
-  Future<Map<String, dynamic>?> _uploadFilesWithPartialSuccess(
-    List<PickedFileItem> files,
-    String fileType,
-  ) async {
-    List<String> successfulUploads = [];
-    List<String> failedFiles = [];
-
-    for (final item in files) {
-      final url = await _uploadToServerWithRetry(item.file);
-      if (url != null) {
-        successfulUploads.add(url);
-      } else {
-        failedFiles.add(item.file.name);
-      }
-    }
-
-    if (failedFiles.isNotEmpty) {
-      _showMessage(
-        'Не удалось загрузить следующие файлы $fileType: ${failedFiles.join(', ')}',
-        isError: true,
-      );
-
-      // Ask user if they want to continue with partial success
-      final shouldContinue = await _showConfirmationDialog(
-        'Некоторые файлы не удалось загрузить. Продолжить без них?',
-      );
-
-      if (!shouldContinue) {
-        return null;
-      }
-    }
-
-    return {'urls': successfulUploads, 'failed': failedFiles};
-  }
-
-  // Helper method to show confirmation dialog
-  Future<bool> _showConfirmationDialog(String message) async {
-    return await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Подтверждение'),
-              content: Text(message),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Отмена'),
-                  onPressed: () => Navigator.of(context).pop(false),
-                ),
-                TextButton(
-                  child: const Text('Продолжить'),
-                  onPressed: () => Navigator.of(context).pop(true),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
   }
 
   // Function to show the date picker
@@ -1020,7 +1023,38 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
                     thickness: 1,
                     color: Color(0xFFE0E0E0),
                   ),
-
+                  // NEW: Carfax PDF report section
+                  _buildSectionHeader('Carfax PDF отчет'),
+                  _buildGenericFileUploadSection(
+                    label: 'Файлы отчета (PDF):',
+                    pickedFiles: _pickedCarfaxFiles,
+                    existingFileUrls: _uploadedCarfaxFileUrls,
+                    onFilesPicked: (files) {
+                      setState(() {
+                        // Ensure only one file is selected for Carfax
+                        _pickedCarfaxFiles = List<PickedFileItem>.from(files);
+                      });
+                    },
+                    onRemovePickedFile: (uniqueId) {
+                      setState(() {
+                        _pickedCarfaxFiles.removeWhere(
+                          (item) => item.uniqueId == uniqueId,
+                        );
+                      });
+                    },
+                    onRemoveExistingFile: (index) {
+                      setState(() {
+                        _uploadedCarfaxFileUrls.removeAt(index);
+                      });
+                    },
+                    allowedExtensions: const ['pdf'],
+                    uploadButtonLabel: 'Выбрать файл PDF',
+                  ),
+                  const Divider(
+                    height: 60,
+                    thickness: 1,
+                    color: Color(0xFFE0E0E0),
+                  ),
                   // Shipment & Port Details Section
                   _buildSectionHeader('Детали отправления и порта'),
                   _buildTwoColumnGrid([
@@ -1476,8 +1510,13 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         // File upload area
         GestureDetector(
           onTap: () async {
+            // Logic to handle single file selection if needed
+            final bool isSingleFile =
+                allowedExtensions != null &&
+                allowedExtensions.contains('pdf') &&
+                uploadButtonLabel.contains('файл PDF');
             final result = await FilePicker.platform.pickFiles(
-              allowMultiple: true,
+              allowMultiple: !isSingleFile,
               type:
                   allowedExtensions == null || allowedExtensions.isEmpty
                       ? FileType.any
@@ -1489,9 +1528,15 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
                   result.files.map((file) {
                     return PickedFileItem(file: file);
                   }).toList();
-              // Combine existing picked files with new ones
-              final updatedFiles = [...pickedFiles, ...newPickedItems];
-              onFilesPicked(updatedFiles);
+
+              // If it's a single-file uploader, replace existing files
+              if (isSingleFile) {
+                onFilesPicked(newPickedItems);
+              } else {
+                // Combine existing picked files with new ones
+                final updatedFiles = [...pickedFiles, ...newPickedItems];
+                onFilesPicked(updatedFiles);
+              }
             }
           },
           child: Container(
@@ -2021,7 +2066,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         final request = http.MultipartRequest(
           'POST',
           Uri.parse(
-            'http://localhost:3000/api/admin/uploadFile',
+            'https://back.kazakhiauto.kz/api/admin/uploadFile',
           ), // Replace with your backend URL
         );
 
