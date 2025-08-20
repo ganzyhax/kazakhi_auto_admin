@@ -137,7 +137,7 @@ class CarPartsRequestPage extends StatelessWidget {
                                             DataCell(
                                               SizedBox(
                                                 width:
-                                                    600, // Constrain width for long comments
+                                                    600, // Constrain width for long comments s
                                                 child: Text(
                                                   request['comment'],
                                                   maxLines: 2,
