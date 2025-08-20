@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kazakhi_auto_admin/constants/app_colors.dart';
+import 'package:kazakhi_auto_admin/constants/app_constants.dart';
 
 // The rest of the existing classes and enums can remain the same
 // BlockType, BlockTypeX, ContentBlock, PickedFileItem
@@ -134,12 +135,9 @@ class _CreateBlockPageState extends State<CreateBlockPage> {
   bool saving = false;
   bool loading = false;
 
-  static const String uploadEndpoint =
-      'https://back.kazakhiauto.kz/api/admin/uploadFile';
-  static const String saveEndpoint =
-      'https://back.kazakhiauto.kz/api/dropcontent';
-  static const String fetchEndpoint =
-      'https://back.kazakhiauto.kz/api/dropcontent';
+  String uploadEndpoint = AppConstant.baseUrl + 'api/admin/uploadFile';
+  String saveEndpoint = AppConstant.baseUrl + 'api/dropcontent';
+  String fetchEndpoint = AppConstant.baseUrl + 'api/dropcontent';
 
   bool get isNew => widget.contentId == null;
 

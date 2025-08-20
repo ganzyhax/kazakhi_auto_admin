@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:kazakhi_auto_admin/api/api.dart';
+import 'package:kazakhi_auto_admin/constants/app_constants.dart';
 import 'package:kazakhi_auto_admin/screens/shipments/bloc/shipments_bloc.dart';
 import 'package:kazakhi_auto_admin/screens/users/components/user_search_widget.dart';
 
@@ -708,7 +709,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
       final request = http.MultipartRequest(
         'POST',
         Uri.parse(
-          'https://back.kazakhiauto.kz/api/admin/uploadFile',
+          AppConstant.baseUrl + 'api/admin/uploadFile',
         ), // Replace with your backend URL
       );
 
@@ -1619,22 +1620,23 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
-                          errorBuilder:
-                              (context, error, stackTrace) => Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: const Color(0xFFE0E0E0),
-                                  ),
-                                ),
-                                child: const Icon(
-                                  Icons.broken_image,
-                                  color: Colors.grey,
-                                ),
-                              ),
+
+                          // errorBuilder:
+                          //     (context, error, stackTrace) => Container(
+                          //       width: 100,
+                          //       height: 100,
+                          //       decoration: BoxDecoration(
+                          //         color: Colors.grey[300],
+                          //         borderRadius: BorderRadius.circular(8),
+                          //         border: Border.all(
+                          //           color: const Color(0xFFE0E0E0),
+                          //         ),
+                          //       ),
+                          //       child: const Icon(
+                          //         Icons.broken_image,
+                          //         color: Colors.grey,
+                          //       ),
+                          //     ),
                         ),
                       ),
                       Positioned(
@@ -2066,7 +2068,7 @@ class _ShipmentCreateModalState extends State<ShipmentCreateModal> {
         final request = http.MultipartRequest(
           'POST',
           Uri.parse(
-            'https://back.kazakhiauto.kz/api/admin/uploadFile',
+            AppConstant.baseUrl + 'api/admin/uploadFile',
           ), // Replace with your backend URL
         );
 

@@ -38,6 +38,8 @@ class ShipmentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _scrollController = ScrollController();
+
     return BlocProvider(
       create: (context) => ShipmentsBloc()..add(ShipmentsLoad()),
       child: BlocBuilder<ShipmentsBloc, ShipmentsState>(
@@ -130,310 +132,337 @@ class ShipmentsScreen extends StatelessWidget {
                               color: Colors.grey[300],
                             ),
                             const SizedBox(height: 24),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                headingRowColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.grey[50]!,
-                                ),
-                                dataRowColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.white,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey[200]!),
-                                ),
-                                columnSpacing: 40,
-                                horizontalMargin: 12,
-                                columns: const [
-                                  DataColumn(
-                                    label: Text(
-                                      'Номер контайнера',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                            Scrollbar(
+                              thumbVisibility: true,
+                              trackVisibility: true,
+                              interactive: true, // 👈 позволяет тянуть мышкой
+                              controller: _scrollController,
+                              child: SingleChildScrollView(
+                                controller: _scrollController,
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  headingRowColor:
+                                      MaterialStateColor.resolveWith(
+                                        (states) => Colors.grey[50]!,
                                       ),
+                                  dataRowColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.white,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.grey[200]!,
                                     ),
                                   ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Заказчик',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                  columnSpacing: 40,
+                                  horizontalMargin: 12,
+                                  columns: const [
+                                    DataColumn(
+                                      label: Text(
+                                        'Номер контайнера',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Машина',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Заказчик',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'VIN',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Машина',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    DataColumn(
+                                      label: Text(
+                                        'VIN',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
 
-                                  DataColumn(
-                                    label: Text(
-                                      'Порт прибытия',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Порт прибытия',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
 
-                                  DataColumn(
-                                    label: Text(
-                                      'Оплачено',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Оплачено',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
 
-                                  DataColumn(
-                                    label: Text(
-                                      'Остаток',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Остаток',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Статус',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Статус',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Создан',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Создан',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Действия',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                    DataColumn(
+                                      label: Text(
+                                        'Действия',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                                rows:
-                                    (state.data as List<dynamic>).map<DataRow>((
-                                      shipment,
-                                    ) {
-                                      final formatted = formatDate(
-                                        shipment['createdAt'],
-                                      );
+                                  ],
+                                  rows:
+                                      (state.data as List<dynamic>).map<
+                                        DataRow
+                                      >((shipment) {
+                                        final formatted = formatDate(
+                                          shipment['createdAt'],
+                                        );
 
-                                      Color statusColor;
-                                      Color statusBgColor;
-                                      switch (shipment['status']) {
-                                        case 'purchased':
-                                          statusColor = Colors.blue[800]!;
-                                          statusBgColor = Colors.blue[100]!;
-                                          break;
-                                        case 'in_transit':
-                                          statusColor = Colors.purple[800]!;
-                                          statusBgColor = Colors.purple[100]!;
-                                          break;
-                                        case 'arrived':
-                                          statusColor = Colors.yellow[800]!;
-                                          statusBgColor = Colors.yellow[100]!;
-                                          break;
-                                        case 'delivered':
-                                          statusColor =
-                                              const Color.fromARGB(
-                                                255,
-                                                112,
-                                                255,
-                                                68,
-                                              )!;
-                                          statusBgColor =
-                                              const Color.fromARGB(
-                                                255,
-                                                240,
-                                                255,
-                                                236,
-                                              )!;
-                                          break;
-                                        default:
-                                          statusColor = Colors.grey[800]!;
-                                          statusBgColor = Colors.grey[100]!;
-                                      }
+                                        Color statusColor;
+                                        Color statusBgColor;
+                                        switch (shipment['status']) {
+                                          case 'purchased':
+                                            statusColor = Colors.blue[800]!;
+                                            statusBgColor = Colors.blue[100]!;
+                                            break;
+                                          case 'in_transit':
+                                            statusColor = Colors.purple[800]!;
+                                            statusBgColor = Colors.purple[100]!;
+                                            break;
+                                          case 'arrived':
+                                            statusColor = Colors.yellow[800]!;
+                                            statusBgColor = Colors.yellow[100]!;
+                                            break;
+                                          case 'delivered':
+                                            statusColor =
+                                                const Color.fromARGB(
+                                                  255,
+                                                  112,
+                                                  255,
+                                                  68,
+                                                )!;
+                                            statusBgColor =
+                                                const Color.fromARGB(
+                                                  255,
+                                                  240,
+                                                  255,
+                                                  236,
+                                                )!;
+                                            break;
+                                          default:
+                                            statusColor = Colors.grey[800]!;
+                                            statusBgColor = Colors.grey[100]!;
+                                        }
 
-                                      return DataRow(
-                                        cells: [
-                                          DataCell(
-                                            Text(
-                                              shipment['containerNumber'],
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              shipment['user']['email'],
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              shipment['carInfo']['brand'] +
-                                                  ' ' +
-                                                  shipment['carInfo']['model'] +
-                                                  ' ' +
-                                                  shipment['carInfo']['year']
-                                                      .toString(),
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              shipment['carInfo']['vin'],
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-
-                                          DataCell(
-                                            Text(
-                                              shipment['receivingPort'],
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              shipment['paid'].toString() +
-                                                  '\$',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.green,
-                                              ),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              shipment['balance'].toString() +
-                                                  '\$',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ),
-
-                                          DataCell(
-                                            Chip(
-                                              label: Text(
-                                                getStatusText(
-                                                  shipment['status'],
-                                                ),
-
-                                                style: TextStyle(
-                                                  color: statusColor,
-                                                  fontWeight: FontWeight.w600,
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(
+                                              Text(
+                                                shipment['containerNumber'],
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
                                                 ),
                                               ),
-                                              backgroundColor: statusBgColor,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 4,
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                shipment['user']['email'],
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                shipment['carInfo']['brand'] +
+                                                    ' ' +
+                                                    shipment['carInfo']['model'] +
+                                                    ' ' +
+                                                    shipment['carInfo']['year']
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                shipment['carInfo']['vin'],
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+
+                                            DataCell(
+                                              Text(
+                                                shipment['receivingPort'],
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                shipment['paid'].toString() +
+                                                    '\$',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                            ),
+                                            DataCell(
+                                              Text(
+                                                shipment['balance'].toString() +
+                                                    '\$',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+
+                                            DataCell(
+                                              Chip(
+                                                label: Text(
+                                                  getStatusText(
+                                                    shipment['status'],
                                                   ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+
+                                                  style: TextStyle(
+                                                    color: statusColor,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                backgroundColor: statusBgColor,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          DataCell(Text(formatted)),
-                                          DataCell(
-                                            Row(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    var res =
-                                                        await ApiClient.get(
-                                                          'api/shipments/' +
-                                                              shipment['_id'],
-                                                        );
-                                                    log(res.toString());
-                                                    if (res['success']) {
-                                                      final bloc =
-                                                          BlocProvider.of<
-                                                            ShipmentsBloc
-                                                          >(context);
+                                            DataCell(Text(formatted)),
+                                            DataCell(
+                                              Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      var res =
+                                                          await ApiClient.get(
+                                                            'api/shipments/' +
+                                                                shipment['_id'],
+                                                          );
+                                                      log(res.toString());
+                                                      if (res['success']) {
+                                                        final bloc =
+                                                            BlocProvider.of<
+                                                              ShipmentsBloc
+                                                            >(context);
 
-                                                      await showDialog(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false,
-                                                        builder:
-                                                            (
-                                                              _,
-                                                            ) => BlocProvider.value(
-                                                              value: bloc,
-                                                              child: Dialog(
-                                                                insetPadding:
-                                                                    const EdgeInsets.all(
-                                                                      20,
-                                                                    ),
-                                                                child: ShipmentCreateModal(
-                                                                  shipmentData:
-                                                                      res['data'],
+                                                        await showDialog(
+                                                          context: context,
+                                                          barrierDismissible:
+                                                              false,
+                                                          builder:
+                                                              (
+                                                                _,
+                                                              ) => BlocProvider.value(
+                                                                value: bloc,
+                                                                child: Dialog(
+                                                                  insetPadding:
+                                                                      const EdgeInsets.all(
+                                                                        20,
+                                                                      ),
+                                                                  child: ShipmentCreateModal(
+                                                                    shipmentData:
+                                                                        res['data'],
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                      );
-                                                      bloc.add(
-                                                        ShipmentsLoad(),
-                                                      ); // ✅ Загрузка после закрытия
-                                                    }
-                                                  },
-                                                  child: Icon(Icons.edit),
-                                                ),
-                                                SizedBox(width: 8),
-                                                Icon(
-                                                  Icons.delete,
-                                                  color: Colors.red[600],
-                                                ),
-                                              ],
+                                                        );
+                                                        bloc.add(
+                                                          ShipmentsLoad(),
+                                                        ); // ✅ Загрузка после закрытия
+                                                      }
+                                                    },
+                                                    child: Icon(Icons.edit),
+                                                  ),
+                                                  SizedBox(width: 8),
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      var res =
+                                                          await ApiClient.post(
+                                                            'api/shipments/delete/' +
+                                                                shipment['_id'],
+                                                            {},
+                                                          );
+                                                      if (res['success']) {
+                                                        BlocProvider.of<
+                                                          ShipmentsBloc
+                                                        >(
+                                                          context,
+                                                        )..add(ShipmentsLoad());
+                                                      }
+                                                    },
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                      color: Colors.red[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    }).toList(),
+                                          ],
+                                        );
+                                      }).toList(),
+                                ),
                               ),
                             ),
                           ],
