@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kazakhi_auto_admin/constants/app_constants.dart';
 import 'package:kazakhi_auto_admin/screens/information/information_edit_screen.dart';
 
 class ContentListPage extends StatefulWidget {
@@ -14,8 +15,7 @@ class ContentListPage extends StatefulWidget {
 class _ContentListPageState extends State<ContentListPage> {
   List<dynamic> contentList = [];
   bool isLoading = false;
-  static const String apiEndpoint =
-      'https://back.kazakhiauto.kz/api/dropcontent';
+  String apiEndpoint = AppConstant.baseUrl + 'api/dropcontent';
 
   @override
   void initState() {
