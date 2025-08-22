@@ -1,6 +1,6 @@
 class AppConstant {
-  // static final String baseUrl = 'https://back.kazakhiauto.kz/';
-  static final String baseUrl = 'http://localhost:3000/';
+  static final String baseUrl = 'https://back.kazakhiauto.kz/';
+  // static final String baseUrl = 'http://localhost:3000/';
 
   static const List<String> emojis = ['🤩', '😌', '😶', '🙁'];
   static const countriesCode = {
